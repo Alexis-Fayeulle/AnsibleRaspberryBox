@@ -169,6 +169,8 @@ $ ansible-playbook --vault-password-file pass.txt -i inventory raspberry.yml --t
 Maintenant tout les element à configurer sont configuré  
 Il ne manque que de les démarrer
 
+À ce moment vous pouvez connecter l'iphone en partage de connection et les cartes wifi
+
 ## Quatrième tag - startup
 
 ```

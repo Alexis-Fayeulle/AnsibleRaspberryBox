@@ -1,0 +1,49 @@
+[all:vars]
+
+ip_rasp="192.168.2.1"
+
+## valid temporary wifi
+
+wifi_ssid="the iPhone of Death"
+# wifi_password= # in vault
+
+## nas share
+
+ip_nas="192.168.2.100"
+mount_path="/mnt/nas"
+nas_path="/Volume_1"
+
+## point d'access wifi
+
+ap_wifi_ssid= "dlink-FE71"
+# vault_ap_wifi_password= # in vault
+
+## reseau
+
+mac_eth0="b8:27:eb:3d:01:30" # build in raspberry eth
+mac_wlan0="b8:27:eb:68:54:65" # build in raspberry wlan
+
+mac_eth1="7e:50:49:e8:f0:a1" # iphone then it pluged in
+mac_wlan1="00:0f:00:14:63:4f" # 2.4Ghz interface
+mac_wlan2="e8:48:b8:8f:da:e9" # Archer T3U for 5Ghz wifi
+
+# last digit for static IP on interfaces
+fin_ip_eth0=1
+fin_ip_wlan1=1
+fin_ip_wlan2=1
+
+# sub network on interfaces
+eth0_subnet=2
+wlan1_subnet=3
+wlan2_subnet=4
+
+# dhcp ranges
+eth0_dhcp_range_start=4
+eth0_dhcp_range_end=49
+wlan1_dhcp_range_start=50
+wlan1_dhcp_range_end=99
+wlan2_dhcp_range_start=100
+wlan2_dhcp_range_end=149
+
+[raspberry]
+rasp

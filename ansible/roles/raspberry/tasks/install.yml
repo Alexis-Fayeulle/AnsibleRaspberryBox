@@ -1,0 +1,83 @@
+---
+
+- name: Installation - Update Upgrade
+  become: true
+  apt:
+    upgrade: yes
+    update_cache: yes
+  tags:
+    - install-update-upgrade
+
+- name: Installation - reboot
+  reboot:
+  tags:
+    - install-reboot
+    - install-reboot-after-up-date-grade
+
+- name: Installation - Paquets
+  apt:
+    pkg:
+      - htop
+      - bmon
+      - iotop
+      - hostapd
+      - dnsmasq
+      - iptables
+      - iptables-persistent
+      - cifs-utils
+      - cron
+      - wget
+      - make
+      - git
+      - bc
+      - build-essential
+      - dkms
+      - raspberrypi-kernel-headers
+      - usbmuxd
+      - ipheth-utils
+      - libimobiledevice-utils
+    state: latest
+    update_cache: true
+  tags:
+    - install-paquets
+
+- name: Installation - Make driver - Clone repo
+  ansible.builtin.git:
+    repo: "https://github.com/RinCat/RTL88x2BU-Linux-Driver.git"
+    dest: "/home/pi/RTL88x2BU-Linux-Driver"
+  tags:
+    - install-wifi
+    - install-wifi-make
+    - install-wifi-make-clone
+
+- name: Installation - Make driver - make clean
+  make:
+    make: "make"
+    chdir: "/home/pi/RTL88x2BU-Linux-Driver"
+    target: clean
+  tags:
+    - install-wifi
+    - install-wifi-make
+    - install-wifi-make-clean
+
+- name: Installation - Make driver - make
+  become: yes
+  make:
+    make: "make"
+    chdir: "/home/pi/RTL88x2BU-Linux-Driver"
+  tags:
+    - install-wifi
+    - install-wifi-make
+    - install-wifi-make-build
+
+- name: Installation - Make driver - make install
+  become: yes
+  make:
+    make: "make"
+    chdir: "/home/pi/RTL88x2BU-Linux-Driver"
+    target: install
+  tags:
+    - install-wifi
+    - install-wifi-make
+    - install-wifi-make-install
+

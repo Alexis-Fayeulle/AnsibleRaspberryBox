@@ -1,0 +1,2 @@
+# Set persistant mac address {{ item.mac }} on {{ item.interface }}
+ACTION=="add", SUBSYSTEM=="net", DRIVERS=="?*", ATTR{address}=="{{ item.mac }}", ATTR{type}=="1", KERNEL=="{{ item.interface_reg }}", NAME="{{ item.interface }}"

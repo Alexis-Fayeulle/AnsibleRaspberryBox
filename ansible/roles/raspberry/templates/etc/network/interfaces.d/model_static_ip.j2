@@ -1,0 +1,9 @@
+# interface {{ item.interface }}
+# need this if iface doent exist
+allow-hotplug {{ item.interface }}
+iface {{ item.interface }} inet static
+  address {{ item.address }}
+  netmask {{ item.netmask }}
+  gateway {{ item.gateway }}
+  dns-nameservers {{ item.dns1 }}
+  dns-nameservers {{ item.dns2 }}

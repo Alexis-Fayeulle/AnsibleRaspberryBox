@@ -1,0 +1,64 @@
+---
+
+- name: Configuration - setup interfaces name by mac address
+  template:
+    src: "templates/etc/udev/rules.d/model_persistent_net.j2"
+    dest: "/etc/udev/rules.d/60_{{ item.interface }}_persistent_net.rules"
+    owner: root
+    group: root
+    mode: "0644"
+  loop:
+    - mac: "{{ mac_eth0 }}"
+      interface: "eth0"
+      interface_reg: "eth*"
+    - mac: "{{ mac_eth1 }}"
+      interface: "eth1"
+      interface_reg: "eth*"
+    - mac: "{{ mac_wlan0 }}"
+      interface: "wlan0"
+      interface_reg: "wlan*"
+    - mac: "{{ mac_wlan1 }}"
+      interface: "wlan1"
+      interface_reg: "wlan*"
+    - mac: "{{ mac_wlan2 }}"
+      interface: "wlan2"
+      interface_reg: "wlan*"
+  tags:
+    - config-set-interface-names
+
+- name: Configuration - network interfaces
+  template:
+    src: "templates/etc/network/interfaces.d/{{ item.model }}.j2"
+    dest: "/etc/network/interfaces.d/{{ item.interface }}.conf"
+    owner: root
+    group: root
+    mode: "0644"
+  loop:
+    - interface: eth0
+      model: 'model_static_ip'
+      address: '192.168.{{ eth0_subnet }}.{{ fin_ip_eth0 }}'
+      netmask: '255.255.255.0'
+      gateway: '192.168.{{ eth0_subnet }}.{{ fin_ip_eth0 }}'
+      dns1: '4.4.4.4'
+      dns2: '8.8.8.8'
+    - interface: eth1
+      model: 'model_hotplug_iphone'
+    - interface: wlan0
+      model: 'model_disable'
+    - interface: wlan1
+      model: 'model_static_ip'
+      address: '192.168.{{ wlan1_subnet }}.{{ fin_ip_wlan1 }}'
+      netmask: '255.255.255.0'
+      gateway: '192.168.{{ wlan1_subnet }}.{{ fin_ip_wlan1 }}'
+      dns1: '4.4.4.4'
+      dns2: '8.8.8.8'
+    - interface: wlan2
+      model: 'model_static_ip'
+      address: '192.168.{{ wlan2_subnet }}.{{ fin_ip_wlan2 }}'
+      netmask: '255.255.255.0'
+      gateway: '192.168.{{ wlan2_subnet }}.{{ fin_ip_wlan2 }}'
+      dns1: '4.4.4.4'
+      dns2: '8.8.8.8'
+  tags:
+    - config-interface
+

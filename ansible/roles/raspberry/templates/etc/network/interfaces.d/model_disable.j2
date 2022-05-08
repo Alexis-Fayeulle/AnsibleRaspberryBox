@@ -1,0 +1,4 @@
+# interface {{ item.interface }}
+# need this if iface doent exist
+allow-hotplug {{ item.interface }}
+iface {{ item.interface }} inet manual

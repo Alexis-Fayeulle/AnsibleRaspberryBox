@@ -1,0 +1,28 @@
+---
+
+- name: Startup - Enable / Disable
+  ansible.builtin.service:
+    name: "{{ item.name }}"
+    enabled: "{{ item.enabled }}"
+    masked: no
+  become: yes
+  loop:
+    - name: "wpa_supplicant"
+      enabled: "no"
+    - name: "netdata" # because unconfigured
+      enabled: "no"
+    - name: "dnsmasq"
+      enabled: "yes"
+    - name: "iptables"
+      enabled: "yes"
+    - name: "hostapd@wlan1" # because magically crash, todo: know why
+      enabled: "no"
+    - name: "hostapd@wlan2"
+      enabled: "yes"
+  tags:
+    - startup-services
+
+- name: Startup - final reboot
+  reboot:
+  tags:
+    - startup-reboot

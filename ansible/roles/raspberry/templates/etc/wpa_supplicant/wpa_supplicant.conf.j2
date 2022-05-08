@@ -1,0 +1,9 @@
+ctrl_interface=/var/run/wpa_supplicant
+update_config=1
+country=FR
+
+network={
+	ssid="{{ wifi_ssid }}"
+	scan_ssid=1
+	psk="{{ vault_wifi_password }}"
+}

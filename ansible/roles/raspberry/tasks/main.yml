@@ -1,0 +1,21 @@
+---
+
+- name: Gestion du réseau / wifi - pre-connect
+  import_tasks: pre-connect.yml
+  tags:
+    - network-pre-connect
+
+- name: Installation
+  import_tasks: install.yml
+  tags:
+    - install
+
+- name: Configuration
+  import_tasks: config.yml
+  tags:
+    - config
+
+- name: Starting all services, Get everything ON
+  import_tasks: startup.yml
+  tags:
+    - startup

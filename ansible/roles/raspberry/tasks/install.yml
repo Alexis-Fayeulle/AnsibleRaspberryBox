@@ -41,6 +41,17 @@
   tags:
     - install-paquets
 
+- name: Installation - Stop & Disable des services installé
+  ansible.builtin.service:
+    name: "{{ item }}"
+    state: stopped
+    enabled: no
+  loop:
+    - hostapd
+    - dnsmasq
+  tags:
+    - install-stop-service
+
 - name: Installation - Make driver - Clone repo
   ansible.builtin.git:
     repo: "https://github.com/RinCat/RTL88x2BU-Linux-Driver.git"

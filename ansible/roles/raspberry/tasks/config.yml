@@ -62,3 +62,77 @@
   tags:
     - config-interface
 
+- name: Configuration - create conf dirs
+  ansible.builtin.file:
+    path: /etc/netdata
+    state: directory
+    mode: '0755'
+    owner: root
+    group: root
+  tags:
+    - config-create-dirs
+
+- name: Configuration - Copying configs files
+  template:
+    src: "templates{{ item }}.j2"
+    dest: "{{ item }}"
+    owner: root
+    group: root
+    mode: "0644"
+  loop:
+    - "/etc/netdata/netdata.conf"
+    - "/etc/nas_cifs_creds"
+    - "/etc/dhcpcd.conf"
+    - "/etc/hosts"
+    - "/etc/iptables/rules.v4"
+  tags:
+    - config-copy
+
+- name: Configuration - dnsmasq config
+  template:
+    src: "templates/etc/dnsmasq.d/model_pre_filled.j2"
+    dest: "/etc/dnsmasq.d/{{ item.interface }}.conf"
+    owner: root
+    group: root
+    mode: "0644"
+  loop:
+    - interface: eth0
+      subnet: '{{ eth0_subnet }}'
+    - interface: wlan1
+      subnet: '{{ wlan1_subnet }}'
+    - interface: wlan2
+      subnet: '{{ wlan2_subnet }}'
+  tags:
+    - config-dnsmasq
+
+- name: Configuration - hostapd config
+  template:
+    src: "templates/etc/hostapd/{{ item.interface }}.j2"
+    dest: "/etc/hostapd/{{ item.interface }}.conf"
+    owner: root
+    group: root
+    mode: "0644"
+  loop:
+    - interface: wlan1
+    - interface: wlan2
+  tags:
+    - config-hostapd
+
+# Set ip forwarding on in /proc and verify token value with the sysctl command
+- name: Configuration - Enable ip_forward
+  ansible.posix.sysctl:
+    name: net.ipv4.ip_forward
+    value: 1
+    sysctl_set: yes
+  tags:
+    - config-forward
+
+- name: Configuration - Add nas in mounts
+  ansible.posix.mount:
+    src: //192.168.2.100/Volume_1
+    path: /mnt/nas
+    fstype: cifs
+    opts: credentials=/etc/nas_cifs_creds,dir_mode=0755,file_mode=0755,uid=1000,gid=1000,vers=1.0,auto
+    state: present
+  tags:
+    - config-fstab

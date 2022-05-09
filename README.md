@@ -179,5 +179,5 @@ $ ansible-playbook --vault-password-file pass.txt -i inventory raspberry.yml --t
 
 Et voilà, raspberry box opérationnel !  
 À noter que chez moi j'ai encore des bugs  
-ça veut dire que cela peut encore changer d'ici la parce que mon antenne wifi marche de façon étrange
+ça veut dire que cela peut encore changer d'ici la
 

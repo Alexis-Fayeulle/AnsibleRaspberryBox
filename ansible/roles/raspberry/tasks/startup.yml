@@ -9,14 +9,12 @@
   loop:
     - name: "wpa_supplicant"
       enabled: "no"
-    - name: "netdata" # because unconfigured
-      enabled: "no"
     - name: "dnsmasq"
       enabled: "yes"
     - name: "iptables"
       enabled: "yes"
-    - name: "hostapd@wlan1" # because magically crash, todo: know why
-      enabled: "no"
+    - name: "hostapd@wlan1"
+      enabled: "yes"
     - name: "hostapd@wlan2"
       enabled: "yes"
   tags:

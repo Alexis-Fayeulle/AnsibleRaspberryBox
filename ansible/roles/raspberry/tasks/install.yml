@@ -8,7 +8,7 @@
   tags:
     - install-update-upgrade
 
-- name: Installation - reboot
+- name: Installation - reboot (use case kernel update)
   reboot:
   tags:
     - install-reboot
@@ -57,7 +57,6 @@
     repo: "https://github.com/RinCat/RTL88x2BU-Linux-Driver.git"
     dest: "/home/pi/RTL88x2BU-Linux-Driver"
   tags:
-    - install-wifi
     - install-wifi-make
     - install-wifi-make-clone
 
@@ -67,7 +66,6 @@
     chdir: "/home/pi/RTL88x2BU-Linux-Driver"
     target: clean
   tags:
-    - install-wifi
     - install-wifi-make
     - install-wifi-make-clean
 
@@ -77,7 +75,6 @@
     make: "make"
     chdir: "/home/pi/RTL88x2BU-Linux-Driver"
   tags:
-    - install-wifi
     - install-wifi-make
     - install-wifi-make-build
 
@@ -88,7 +85,6 @@
     chdir: "/home/pi/RTL88x2BU-Linux-Driver"
     target: install
   tags:
-    - install-wifi
     - install-wifi-make
     - install-wifi-make-install
 

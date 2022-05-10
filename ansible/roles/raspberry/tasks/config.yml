@@ -62,16 +62,6 @@
   tags:
     - config-interface
 
-- name: Configuration - create conf dirs
-  ansible.builtin.file:
-    path: /etc/netdata
-    state: directory
-    mode: '0755'
-    owner: root
-    group: root
-  tags:
-    - config-create-dirs
-
 - name: Configuration - Copying configs files
   template:
     src: "templates{{ item }}.j2"
@@ -80,12 +70,23 @@
     group: root
     mode: "0644"
   loop:
-    - "/etc/netdata/netdata.conf"
-    - "/etc/nas_cifs_creds"
     - "/etc/dhcpcd.conf"
     - "/etc/hosts"
     - "/etc/iptables/rules.v4"
   tags:
+    - config-copy
+
+- name: Configuration - Copying configs files - NAS
+  template:
+    src: "templates{{ item }}.j2"
+    dest: "{{ item }}"
+    owner: root
+    group: root
+    mode: "0644"
+  loop:
+    - "/etc/nas_cifs_creds"
+  tags:
+    - nas
     - config-copy
 
 - name: Configuration - dnsmasq config
@@ -135,4 +136,5 @@
     opts: credentials=/etc/nas_cifs_creds,dir_mode=0755,file_mode=0755,uid=1000,gid=1000,vers=1.0,auto
     state: present
   tags:
+    - nas
     - config-fstab

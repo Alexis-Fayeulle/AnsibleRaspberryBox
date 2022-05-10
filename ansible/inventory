@@ -13,9 +13,12 @@ ip_nas="192.168.2.100"
 mount_path="/mnt/nas"
 nas_path="/Volume_1"
 
+nas_user="alexis"
+# vault_nas_pass= # in vault
+
 ## point d'access wifi
 
-ap_wifi_ssid= "dlink-FE71"
+ap_wifi_ssid="dlink-FE72"
 # vault_ap_wifi_password= # in vault
 
 ## reseau
@@ -28,16 +31,19 @@ mac_wlan1="00:0f:00:14:63:4f" # 2.4Ghz interface
 mac_wlan2="e8:48:b8:8f:da:e9" # Archer T3U for 5Ghz wifi
 
 # last digit for static IP on interfaces
+# 192.168.1.x
 fin_ip_eth0=1
 fin_ip_wlan1=1
 fin_ip_wlan2=1
 
 # sub network on interfaces
+# 192.168.x.1
 eth0_subnet=2
 wlan1_subnet=3
 wlan2_subnet=4
 
-# dhcp ranges
+# dhcp ip ranges assignation
+# 192.168.1.4 => 192.168.1.49
 eth0_dhcp_range_start=4
 eth0_dhcp_range_end=49
 wlan1_dhcp_range_start=50

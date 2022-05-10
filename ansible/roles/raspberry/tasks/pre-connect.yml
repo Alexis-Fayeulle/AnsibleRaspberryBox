@@ -1,6 +1,6 @@
 ---
 
-- name: Configuration - setup interfaces name by mac address
+- name: Gestion du reseau - setup interfaces name by mac address
   template:
     src: "templates/etc/udev/rules.d/model_persistent_net.j2"
     dest: "/etc/udev/rules.d/60_{{ item.interface }}_persistent_net.rules"
@@ -17,7 +17,7 @@
   tags:
     - config-set-interface-names
 
-- name: Gestion du reseau - pre-connect - interfaces
+- name: Gestion du reseau - pre-connect - setup interfaces ip config
   template:
     src: "templates/etc/network/interfaces.d/{{ item.model }}.j2"
     dest: "/etc/network/interfaces.d/{{ item.interface }}"
@@ -37,7 +37,7 @@
   tags:
     - network-pre-connect-interface
 
-- name: Gestion du wifi - pre-connect - wpa_supplicant
+- name: Gestion du wifi - pre-connect - wpa_supplicant wifi connection
   template:
     src: "templates/etc/wpa_supplicant/wpa_supplicant.conf.j2"
     dest: "/etc/wpa_supplicant/wpa_supplicant.conf"
@@ -47,7 +47,7 @@
   tags:
     - network-pre-connect-wpa-supplicant-file
 
-- name: Gestion du wifi - pre-connect - dhcpcd
+- name: Gestion du wifi - pre-connect - dhcpcd conf (basic)
   template:
     src: "templates/etc/dhcpcd.conf.j2"
     dest: "/etc/dhcpcd.conf"

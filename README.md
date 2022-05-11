@@ -22,7 +22,7 @@ A faire :
 Toute les operations sont faisables à la suite depuis le status d'access rapide au raspberry  
 Vous pouvez parfaitement juste faire `Installation du raspberry` laisser votre telephone en point d'access wifi et faire tourner le script  
 En suivant les quelques petite instruction en dessous, cela marche tout autant  
-⚠️ **Attention tout de meme a bien remplir l'inventory et le .vault sans erreur** ⚠️  
+⚠️ **Attention tout de meme à bien remplir l'inventory et le .vault sans erreur** ⚠️  
 ⚠️ **Cet operation est longue prévoyez 1 Heure** ⚠️  
 L'operation la plus longue est l'installation
 
@@ -299,4 +299,16 @@ Et voilà, raspberry box opérationnel !
 Vous pouvez connecter votre iphone en partage de connection et enlever l'ip fixe de votre ordinateur  
 À noter que chez moi j'ai encore des bugs  
 ça veut dire que cela peut encore changer d'ici la
+
+## Liens
+
+Ici, des liens qui m'on permit d'apprendre à créer tout ça
+
+1. https://www.framboise314.fr/raspap-creez-votre-hotspot-wifi-avec-un-raspberry-pi-de-facon-express
+2. https://www.instructables.com/Share-WiFi-With-Ethernet-Port-on-a-Raspberry-Pi
+3. https://doc.ubuntu-fr.org/hostapd
+4. https://unix.stackexchange.com/questions/137894/how-do-i-find-out-if-my-wireless-card-supports-5-ghz
+5. https://github.com/RinCat/RTL88x2BU-Linux-Driver
+
+Et des tonnes de page stackoverflow
 

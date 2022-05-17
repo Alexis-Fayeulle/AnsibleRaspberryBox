@@ -1,0 +1,11 @@
+# wpa_supplicant for classic wifi connection
+ctrl_interface=/var/run/wpa_supplicant
+#country=FR
+
+{% for a_wifi in vault_wifis %}
+network={
+	ssid="{{ a_wifi.ssid }}"
+	psk="{{ a_wifi.pass }}"
+}
+
+{% endfor %}

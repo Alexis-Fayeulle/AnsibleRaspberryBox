@@ -15,7 +15,7 @@
   tags:
     - config
 
-- name: Starting all services, Get everything ON
-  import_tasks: startup.yml
+- name: Configuration - Source wifi
+  import_tasks: config_src_wifi.yml
   tags:
-    - startup
+    - config-srcwifi

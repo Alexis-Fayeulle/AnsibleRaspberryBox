@@ -39,8 +39,8 @@
       address: '192.168.{{ eth0_subnet }}.{{ fin_ip_eth0 }}'
       netmask: '255.255.255.0'
       gateway: '192.168.{{ eth0_subnet }}.{{ fin_ip_eth0 }}'
-      dns1: '4.4.4.4'
-      dns2: '8.8.8.8'
+      dns1: '1.1.1.1'
+      dns2: '1.0.0.1'
     - interface: eth1
       model: 'model_hotplug_iphone'
     - interface: wlan0
@@ -50,15 +50,15 @@
       address: '192.168.{{ wlan1_subnet }}.{{ fin_ip_wlan1 }}'
       netmask: '255.255.255.0'
       gateway: '192.168.{{ wlan1_subnet }}.{{ fin_ip_wlan1 }}'
-      dns1: '4.4.4.4'
-      dns2: '8.8.8.8'
+      dns1: '1.1.1.1'
+      dns2: '1.0.0.1'
     - interface: wlan2
       model: 'model_static_ip'
       address: '192.168.{{ wlan2_subnet }}.{{ fin_ip_wlan2 }}'
       netmask: '255.255.255.0'
       gateway: '192.168.{{ wlan2_subnet }}.{{ fin_ip_wlan2 }}'
-      dns1: '4.4.4.4'
-      dns2: '8.8.8.8'
+      dns1: '1.1.1.1'
+      dns2: '1.0.0.1'
   tags:
     - config-interface
 
@@ -70,9 +70,9 @@
     group: root
     mode: "0644"
   loop:
-    - "/etc/dhcpcd.conf"
-    - "/etc/hosts"
-    - "/etc/iptables/rules.v4"
+    - /etc/dhcpcd.conf
+    - /etc/hosts
+    - /etc/iptables/rules.v4
   tags:
     - config-copy
 
@@ -89,9 +89,9 @@
     - nas
     - config-copy
 
-- name: Configuration - dnsmasq config
+- name: Configuration - Dnsmasq config
   template:
-    src: "templates/etc/dnsmasq.d/model_pre_filled.j2"
+    src: "templates/etc/dnsmasq.d/model_pre_filled.conf.j2"
     dest: "/etc/dnsmasq.d/{{ item.interface }}.conf"
     owner: root
     group: root
@@ -106,16 +106,16 @@
   tags:
     - config-dnsmasq
 
-- name: Configuration - hostapd config
+- name: Configuration - Hostapd config
   template:
-    src: "templates/etc/hostapd/{{ item.interface }}.j2"
-    dest: "/etc/hostapd/{{ item.interface }}.conf"
+    src: "templates/etc/hostapd/{{ item }}.conf.j2"
+    dest: "/etc/hostapd/{{ item }}.conf"
     owner: root
     group: root
     mode: "0644"
   loop:
-    - interface: wlan1
-    - interface: wlan2
+    - wlan1
+    - wlan2
   tags:
     - config-hostapd
 
@@ -138,3 +138,7 @@
   tags:
     - nas
     - config-fstab
+
+
+- name: Configuration - Restarts machine
+  reboot:

@@ -4,6 +4,21 @@ Projet pour créer avec un raspberry une box qui prend en entrée un iphone et e
 Projet pour surtout sauvegarder ce code et la methode pour de faire
 Je n'ai pas pour volonté de faire quelque chose qui marche partout, mais qui marche assez bien pour chez moi
 
+## WIP :
+
+"Oh mince ! Plus de forfait ! Je dois connecter le raspberry a un wifi plutôt qu'au telephone"  
+todo: README
+
+Connection En wifi
+```
+ansible-playbook --vault-password-file pass.txt -i inventory raspberry.yml --skip-tags nas
+```
+
+Connection En Telephone
+```
+ansible-playbook --vault-password-file pass.txt -i inventory raspberry.yml --skip-tags nas,config-srcwifi
+```
+
 ### Status
 
 - Recettée : Non

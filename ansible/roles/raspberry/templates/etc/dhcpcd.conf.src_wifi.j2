@@ -58,10 +58,10 @@ slaac private
 #interface eth0
 #fallback static_eth0
 
-#denyinterfaces eth1
+denyinterfaces eth1
 
-interface wlan0
-    nohook wpa_supplicant
+#interface wlan0
+#    nohook wpa_supplicant
 
 interface wlan1
     nohook wpa_supplicant

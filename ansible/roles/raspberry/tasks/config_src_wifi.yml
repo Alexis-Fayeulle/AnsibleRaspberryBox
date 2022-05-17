@@ -1,0 +1,47 @@
+---
+
+- name: Configuration - Source wifi - network interfaces
+  template:
+    src: "templates/etc/network/interfaces.d/{{ item.model }}.j2"
+    dest: "/etc/network/interfaces.d/{{ item.interface }}.conf"
+    owner: root
+    group: root
+    mode: "0644"
+  loop:
+    - interface: eth1
+      model: "model_disable"
+    - interface: wlan0
+      model: 'model_empty'
+  tags:
+    - config-srcwifi-interface
+
+- name: Configuration - Source wifi - Copying configs files
+  template:
+    src: "templates{{ item }}.src_wifi.j2"
+    dest: "{{ item }}"
+    owner: root
+    group: root
+    mode: "0644"
+  loop:
+    - /etc/dhcpcd.conf
+    - /etc/iptables/rules.v4
+    - /etc/wpa_supplicant/wpa_supplicant.conf
+  tags:
+    - config-srcwifi-copy
+
+- name: Configuration - Source wifi - Services
+  ansible.builtin.service:
+    name: "{{ item.name }}"
+    enabled: "{{ item.enabled }}"
+    state: "{{ item.state }}"
+    masked: no
+  become: yes
+  loop:
+    - name: "wpa_supplicant"
+      enabled: no
+      state: stopped
+  tags:
+    - config-srcwifi-services
+
+- name: Configuration - Source wifi - Restarts machine
+  reboot:

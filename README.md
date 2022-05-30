@@ -11,12 +11,12 @@ todo: README
 
 Connection En wifi
 ```
-ansible-playbook --vault-password-file pass.txt -i inventory raspberry.yml --skip-tags nas
+ansible-playbook --vault-password-file pass.txt -i inventory raspberry.yml
 ```
 
 Connection En Telephone
 ```
-ansible-playbook --vault-password-file pass.txt -i inventory raspberry.yml --skip-tags nas,config-srcwifi
+ansible-playbook --vault-password-file pass.txt -i inventory raspberry.yml --skip-tags config-srcwifi
 ```
 
 ### Status
@@ -35,19 +35,13 @@ A faire :
 ### Pour ceux qui ons deja lu le reste
 
 Toute les operations sont faisables à la suite depuis le status d'access rapide au raspberry  
-Vous pouvez parfaitement juste faire `Installation du raspberry` laisser votre telephone en point d'access wifi et faire tourner le script  
+Vous pouvez parfaitement juste ecrire l'image sur la carte SD, faire `Installation du raspberry`, laisser votre telephone en point d'access wifi et faire tourner le script  
 En suivant les quelques petite instruction en dessous, cela marche tout autant  
 ⚠️ **Attention tout de meme à bien remplir l'inventory et le .vault sans erreur** ⚠️  
 ⚠️ **Cet operation est longue prévoyez 1 Heure** ⚠️  
-L'operation la plus longue est l'installation
+L'operation la plus longue est l'etape d'installation dans ansible
 
-Pour tout exécuter sans les configs du nas :
-
-```
-ansible-playbook --vault-password-file pass.txt -i inventory raspberry.yml --skip-tags nas
-```
-
-Et pour tout exécuter :
+Pour tout exécuter :
 
 ```
 ansible-playbook --vault-password-file pass.txt -i inventory raspberry.yml
@@ -62,13 +56,24 @@ J'ai a ma disposition
 - un écran
 - un clavier
 - une souris
-- un telephone pour me fournir un hotspot wifi avec internet
-- un réseau local sans dhcp ni gateway (un switch tout seul on peut dire, pas de source)
-- un nas en ip fixe
+- un iphone 5S avec un forfait 4G pour me fournir un hotspot wifi / partage internet en USB
+- un réseau local sans dhcp ni gateway (un switch tout seul on peut dire, pas de source, pas de box)
 - une carte wifi en usb à onde porteuse que j'ai achetée il y a longtemps (2.4Ghz)
 - une clef usb wifi Archer T3U
-- un iphone 5S avec un forfait 4G
 - un ordinateur qui exécutera l'ansible, connecté au reseau ET a une autre source d'internet (wifi par exemple)
+
+J'ai plusieurs configurations pour pouvoir manipuler mon raspberry sur la carte réseau de l'ordinateur
+
+Config "IP fixe" : cela vous servira à être present sur le reseau et internet quoi qu'il arrive  
+Je vous conseil de vous configurer ainsi pour être sur du fonctionnement  
+À définir manuellement  
+Adresse IP : 192.168.2.30  
+Sous-réseau : 255.255.255.0  
+Routeur : (vide)  
+Server DNS : (vide)
+
+Config "Automatique" : cela vous servira à tester si tout fonctionne  
+Définir en configuration DHCP
 
 Sur l'ordinateur, pensez à installer ansible  
 Mon ordinateur :
@@ -91,8 +96,7 @@ NE PAS BRANCHER PLUS, ou sinon udev vas être en capacité de définir les carte
 Définissez une IP fixe à votre raspberry et activez le ssh
 
 ```
-$ cd /etc/network/interfaces.d
-$ nano eth0
+$ nano /etc/network/interfaces.d/eth0
 allow-hotplug eth0
 iface eth0 inet static
   address 192.168.2.1
@@ -113,14 +117,10 @@ $ sudo systemctl start ssh
 
 À ce moment, il faut faire la première connection avec l'ordinateur  
 Sur l'ordinateur définir une ip fixe puis faire ssh (le raspberry)  
-Pour moi j'ai un host et une config  
-Voila ce que cela donne
+Pour moi j'ai un host et une config ssh
 
-Pour définir l'IP fixe, je vous laisse faire, je ne connais pas votre système  
-En tout cas voila les informations qu'il vous faut  
-IP : 192.168.2.x  
-masque : 255.255.255.0  
-Routeur / Gateway : RIEN, sinon le système vas tenter de chercher internet sur ce réseau, mais on sait qu'il n'y en a pas !
+Pour définir l'IP fixe, je vous laisse faire, je ne connais pas votre système
+J'ai décris les configurations reseau plus haut  
 
 ```
 # commandes equivalentes
@@ -141,15 +141,23 @@ Are you sure you want to continue connecting (yes/no/[fingerprint])?
 Notez bien le "ED25519", c'est important pour savoir quelle clef est utilisé
 
 ```
-$ cd /etc/ssh
-$ sudo ssh-keygen -lf ssh_host_ed25519_key
+$ sudo ssh-keygen -lf /etc/ssh/ssh_host_ed25519_key
 256 SHA256:___________________________________________ root@raspberrypi (ED25519)
 ```
 
 Vérifiez que le hash est le même et sur l'ordinateur et dites "yes" dans ce cas  
 À ce moment, vous devez entrer un mot de passe pour l'utilisateur "pi"  
-Mot de passe : "raspberry"  
+Mot de passe par default : "raspberry"  
 Pensez bien à le changer et de le noter dans un endroit sécurisé
+
+Changer le mot de passe : 
+```
+# on verifie que l'on est bien "pi"
+$ whoami
+pi
+# changer le mot de passe
+$ passwd
+```
 
 Sur l'ordinateur, copiez votre clef publique  
 Et collez la dans `/etc/ssh/authorized_keys`
@@ -164,7 +172,7 @@ $ nano /etc/ssh/authorized_keys
 ssh-rsa ____..  ..____ atyklaxas@atyklaxas-ordinateur
 ```
 
-Vous avez maintenant crée un access facile a votre raspberry  
+Vous avez maintenant créé un access facile a votre raspberry  
 Vous pouvez maintenant tester cela  
 Sur l'ordinateur :
 
@@ -182,6 +190,9 @@ Last login: Sun May  8 19:20:43 2022 from 192.168.2.89
 pi@raspberrypi:~ $
 ```
 
+Au cas ou cela failerais, je vous conseil de faire une image de la carte SD du raspberry  
+Je vous laisse choisir un logiciel pour faire vos images, moi j'utilise ubuntu avec le logiciel "Disk" sur un autre ordinateur
+
 ## Avant ansible
 
 Pour que tout cela fonctionne, je vais vous indiquer les variables à remplir et fichier a créé
@@ -189,11 +200,6 @@ Pour que tout cela fonctionne, je vais vous indiquer les variables à remplir et
 - `ip_rasp` IP du raspberry, normalement 192.168.2.1
 - `wifi_ssid` SSID du wifi pour l'operation pre-connect, pour avoir internet durant la procedure
 - `wifi_password` Mot de passe du wifi a mettre dans le .vault
-- `ip_nas` IP du nas a monter
-- `mount_path` Point de montage du nas
-- `nas_path` Chemin dans le nas à monter
-- `nas_user` Utilisateur cifs du nas
-- `vault_nas_pass` Mot de passe cifs du nas
 - `ap_wifi_ssid` Nom du SSID du raspberry, a noter que le reseau 5Ghz sera suivi de `-5Ghz`
 - `vault_ap_wifi_password` Mot de passe wifi du point d'access
 - `mac_eth0` Adresse mac de la carte Ethernet du raspberry *🔎1
@@ -213,6 +219,14 @@ Pour que tout cela fonctionne, je vais vous indiquer les variables à remplir et
 - `wlan1_dhcp_range_end` Fin de plage DHCP sur wlan1
 - `wlan2_dhcp_range_start` Début de plage DHCP sur wlan2
 - `wlan2_dhcp_range_end` Fin de plage DHCP sur wlan2
+- `vault_wifis` Tableau de wifi connectable par un appareil, ici utilisé pour le raspberry, pour chaque element, specifier ssid et pass
+<!--
+- `ip_nas` IP du nas a monter
+- `mount_path` Point de montage du nas
+- `nas_path` Chemin dans le nas à monter
+- `nas_user` Utilisateur cifs du nas
+- `vault_nas_pass` Mot de passe cifs du nas
+-->
 
 ### *🔎1
 

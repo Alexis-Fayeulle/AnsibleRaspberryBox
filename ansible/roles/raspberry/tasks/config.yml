@@ -76,19 +76,6 @@
   tags:
     - config-copy
 
-#- name: Configuration - Copying configs files - NAS
-#  template:
-#    src: "templates{{ item }}.j2"
-#    dest: "{{ item }}"
-#    owner: root
-#    group: root
-#    mode: "0644"
-#  loop:
-#    - "/etc/nas_cifs_creds"
-#  tags:
-#    - nas
-#    - config-copy
-
 - name: Configuration - Dnsmasq config
   template:
     src: "templates/etc/dnsmasq.d/model_pre_filled.conf.j2"
@@ -127,17 +114,6 @@
     sysctl_set: yes
   tags:
     - config-forward
-
-#- name: Configuration - Add nas in mounts
-#  ansible.posix.mount:
-#    src: //192.168.2.100/Volume_1
-#    path: /mnt/nas
-#    fstype: cifs
-#    opts: credentials=/etc/nas_cifs_creds,dir_mode=0755,file_mode=0755,uid=1000,gid=1000,vers=1.0,auto
-#    state: present
-#  tags:
-#    - nas
-#    - config-fstab
 
 - name: Configuration - Restarts machine
   reboot:

@@ -26,7 +26,7 @@ nas_user="alexis"
 
 ## point d'access wifi
 
-ap_wifi_ssid="dlink-FE72"
+ap_wifi_ssid="pas-dlink-FE72"
 # vault_ap_wifi_password= # in vault
 
 ## reseau

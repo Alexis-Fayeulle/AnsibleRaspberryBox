@@ -21,9 +21,6 @@ ansible-playbook --vault-password-file pass.txt -i inventory raspberry.yml --ski
 
 ### Status
 
-- Recettée : Non
-- Testé : Oui
-
 A verifier :
 
 - la stabilité de l'adresse mac de l'iphone en partage de connection USB
@@ -113,10 +110,11 @@ PubkeyAuthentication yes
 AuthorizedKeysFile      /etc/ssh/authorized_keys
 (...)
 $ sudo systemctl start ssh
+$ sudo systemctl enable ssh
 ```
 
 À ce moment, il faut faire la première connection avec l'ordinateur  
-Sur l'ordinateur définir une ip fixe puis faire ssh (le raspberry)  
+Sur l'ordinateur définir une ip fixe puis faire un ssh sur le raspberry  
 Pour moi j'ai un host et une config ssh
 
 Pour définir l'IP fixe, je vous laisse faire, je ne connais pas votre système
@@ -190,7 +188,7 @@ Last login: Sun May  8 19:20:43 2022 from 192.168.2.89
 pi@raspberrypi:~ $
 ```
 
-Au cas ou cela failerais, je vous conseil de faire une image de la carte SD du raspberry  
+Au cas ou ansible failerais, je vous conseil de faire une image de la carte SD du raspberry a ce moment  
 Je vous laisse choisir un logiciel pour faire vos images, moi j'utilise ubuntu avec le logiciel "Disk" sur un autre ordinateur
 
 ## Avant ansible
@@ -199,7 +197,7 @@ Pour que tout cela fonctionne, je vais vous indiquer les variables à remplir et
 
 - `ip_rasp` IP du raspberry, normalement 192.168.2.1
 - `wifi_ssid` SSID du wifi pour l'operation pre-connect, pour avoir internet durant la procedure
-- `wifi_password` Mot de passe du wifi a mettre dans le .vault
+- `vault_wifi_password` Mot de passe du wifi a mettre dans le .vault
 - `ap_wifi_ssid` Nom du SSID du raspberry, a noter que le reseau 5Ghz sera suivi de `-5Ghz`
 - `vault_ap_wifi_password` Mot de passe wifi du point d'access
 - `mac_eth0` Adresse mac de la carte Ethernet du raspberry *🔎1
@@ -226,6 +224,13 @@ Pour que tout cela fonctionne, je vais vous indiquer les variables à remplir et
 - `nas_path` Chemin dans le nas à monter
 - `nas_user` Utilisateur cifs du nas
 - `vault_nas_pass` Mot de passe cifs du nas
+vault_wifi_password: ""
+vault_ap_wifi_password: ""
+vault_nas_pass: ""
+vault_wifis: [
+    {'ssid': '', 'pass': ''},
+    {'ssid': '', 'pass': ''}
+]
 -->
 
 ### *🔎1
@@ -266,10 +271,7 @@ wlan1: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
         TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
 ```
 
-On trouve l'adresse mac ici : `ether 00:0f:00:14:63:4f`
-
-### ___
-
+On trouve l'adresse mac ici : `ether 00:0f:00:14:63:4f`  
 A penser a remplir :
 - `ansible/roles/raspberry/templates/etc/hosts.j2` indisponible parce que gitignoré
 - Le mot de passe wifi du hotspot `vault_wifi_password` dans .vault
